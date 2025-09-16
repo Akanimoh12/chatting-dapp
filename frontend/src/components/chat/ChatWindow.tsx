@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import { useRef, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { useChatStore } from '../../stores/chatStore'
 import { useUserStore } from '../../stores/userStore'
@@ -13,14 +13,71 @@ export const ChatWindow: React.FC = () => {
   const { messages, users, isLoadingMessages } = useChat()
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  // Get current chat messages
-  const currentMessages = activeChat === null
-    ? messages.filter(m => m.isGroupMessage)
-    : messages.filter(m => 
-        !m.isGroupMessage && 
-        ((m.sender === user?.address && m.recipient === activeChat) ||
-         (m.sender === activeChat && m.recipient === user?.address))
-      )
+  // Get current chat messages with enhanced filtering and debugging
+  const currentMessages = useMemo(() => {
+    console.log('🔍 Filtering messages. Total:', messages.length, 'ActiveChat:', activeChat ? `direct:${activeChat.substring(0, 8)}` : 'group')
+    console.log('📋 All messages:', messages.map(m => ({
+      id: m.id.substring(0, 15),
+      isGroupMessage: m.isGroupMessage,
+      sender: m.sender?.substring(0, 8),
+      recipient: m.recipient?.substring(0, 8),
+      content: m.content.substring(0, 20),
+      isPending: m.isPending
+    })))
+    
+    if (activeChat === null) {
+      // Group chat: show only messages with isGroupMessage === true
+      const filtered = messages.filter(m => {
+        const isGroup = Boolean(m.isGroupMessage === true)
+        const hasNoRecipient = !m.recipient || m.recipient === undefined
+        const isValidGroup = isGroup && hasNoRecipient
+        
+        console.log('Group filter:', { 
+          id: m.id.substring(0, 15), 
+          isGroupMessage: m.isGroupMessage, 
+          isGroup, 
+          hasNoRecipient,
+          isValidGroup,
+          content: m.content.substring(0, 20) 
+        })
+        return isValidGroup
+      })
+      
+      console.log('✅ Group chat filtered:', filtered.length, 'messages')
+      return filtered
+    } else {
+      // Direct chat: show only messages between current user and activeChat
+      const filtered = messages.filter(m => {
+        const isDirect = Boolean(m.isGroupMessage === false)
+        const hasRecipient = Boolean(m.recipient)
+        const normalizedSender = m.sender?.toLowerCase()
+        const normalizedRecipient = m.recipient?.toLowerCase()
+        const normalizedUser = user?.address?.toLowerCase()
+        const normalizedActiveChat = activeChat?.toLowerCase()
+        
+        const isConversationMember = isDirect && hasRecipient && 
+          ((normalizedSender === normalizedUser && normalizedRecipient === normalizedActiveChat) ||
+           (normalizedSender === normalizedActiveChat && normalizedRecipient === normalizedUser))
+           
+        console.log('Direct filter:', { 
+          id: m.id.substring(0, 15), 
+          isGroupMessage: m.isGroupMessage, 
+          isDirect, 
+          hasRecipient,
+          isConversationMember,
+          normalizedSender: normalizedSender?.substring(0, 8),
+          normalizedRecipient: normalizedRecipient?.substring(0, 8),
+          normalizedActiveChat: normalizedActiveChat?.substring(0, 8),
+          normalizedUser: normalizedUser?.substring(0, 8),
+          content: m.content.substring(0, 20)
+        })
+        return isConversationMember
+      })
+      
+      console.log('✅ Direct chat filtered:', filtered.length, 'messages for', activeChat.substring(0, 8))
+      return filtered
+    }
+  }, [messages, activeChat, user?.address])
 
   // Get current chat user
   const currentChatUser = activeChat ? users.find(u => u.address === activeChat) : null

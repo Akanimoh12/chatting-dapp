@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useReadContract } from 'wagmi'
 import { motion } from 'framer-motion'
 import { BOOMER_CHAT_ABI } from '../../config/contracts'

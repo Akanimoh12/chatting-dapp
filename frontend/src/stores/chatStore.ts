@@ -23,9 +23,24 @@ export const useChatStore = create<ChatStore>((set) => ({
   optimisticMessages: [],
 
   addMessage: (message) =>
-    set((state) => ({
-      messages: [...state.messages, message],
-    })),
+    set((state) => {
+      // Check for duplicates before adding
+      const exists = state.messages.some(m => m.id === message.id)
+      if (exists) {
+        console.log('⚠️ Message already exists in store, skipping:', message.id)
+        return state
+      }
+      
+      console.log('📝 Adding message to store:', {
+        id: message.id,
+        isGroupMessage: message.isGroupMessage,
+        content: message.content.substring(0, 30)
+      })
+      
+      return {
+        messages: [...state.messages, message],
+      }
+    }),
 
   addUser: (user) =>
     set((state) => ({

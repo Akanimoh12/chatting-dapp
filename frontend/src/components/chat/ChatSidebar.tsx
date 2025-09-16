@@ -52,7 +52,7 @@ export const ChatSidebar: React.FC = () => {
               {user?.displayName || 'Anonymous'}
             </h3>
             <p className="text-blue-200 text-sm truncate">
-              {user?.username ? `${user.username}.boomer` : formatAddress(address || '')}
+              {user?.username || formatAddress(address || '')}
             </p>
           </div>
           <button

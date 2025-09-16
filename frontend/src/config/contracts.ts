@@ -1,7 +1,7 @@
 // Contract addresses for different networks
 export const CONTRACT_ADDRESSES = {
   // Sepolia testnet - Your deployed BoomerChatRegistry contract
-  11155111: '0x6f457540f0F38e564b680b9b7c90393C46b4A8cb', // Deployed BoomerChatRegistry on Sepolia
+  11155111: '0x6767Dd3830A88DED122c5dA4d05D052227097886', // Deployed BoomerChatRegistry on Sepolia
   // Mainnet (when ready)
   1: '0x0000000000000000000000000000000000000000',
 } as const
