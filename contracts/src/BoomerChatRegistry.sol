@@ -9,6 +9,7 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
  * @dev Stores all messages on-chain, manages user profiles, and emits comprehensive events for real-time updates
  */
 contract BoomerChatRegistry is Ownable {
+    
     // Events for real-time frontend updates
     event BoomerUserRegistered(
         address indexed user,
