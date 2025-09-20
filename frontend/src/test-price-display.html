@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Display Design Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e40af, #7c3aed);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 320px;
+            height: 600px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        
+        .price-section {
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.4), rgba(124, 58, 237, 0.4));
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 16px;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .title {
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            letter-spacing: 0.025em;
+        }
+        
+        .refresh-btn {
+            color: #93c5fd;
+            padding: 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .refresh-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .price-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .price-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border-radius: 8px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.2s;
+        }
+        
+        .price-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .card-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .card-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .icon {
+            font-size: 18px;
+        }
+        
+        .pair-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .base-currency {
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .quote-currency {
+            color: #bfdbfe;
+            font-size: 12px;
+        }
+        
+        .card-right {
+            text-align: right;
+        }
+        
+        .price {
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .change-positive {
+            color: #4ade80;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .change-negative {
+            color: #f87171;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .automation-status {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .status-label {
+            color: #bfdbfe;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ade80;
+        }
+        
+        .status-text {
+            color: #bfdbfe;
+            font-size: 12px;
+        }
+        
+        .footer {
+            text-align: center;
+            color: #93c5fd;
+            font-size: 12px;
+            margin-top: 8px;
+            opacity: 0.75;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="price-section">
+            <!-- Header -->
+            <div class="header">
+                <div class="title">💹 LIVE PRICES</div>
+                <div class="refresh-btn">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
+                    </svg>
+                </div>
+            </div>
+            
+            <!-- Price Cards -->
+            <div class="price-cards">
+                <div class="price-card">
+                    <div class="card-content">
+                        <div class="card-left">
+                            <div class="icon">₿</div>
+                            <div class="pair-info">
+                                <div class="base-currency">BTC</div>
+                                <div class="quote-currency">/USD</div>
+                            </div>
+                        </div>
+                        <div class="card-right">
+                            <div class="price">$115.8K</div>
+                            <div class="change-positive">+2.45%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="price-card">
+                    <div class="card-content">
+                        <div class="card-left">
+                            <div class="icon">Ξ</div>
+                            <div class="pair-info">
+                                <div class="base-currency">ETH</div>
+                                <div class="quote-currency">/USD</div>
+                            </div>
+                        </div>
+                        <div class="card-right">
+                            <div class="price">$4,461.25</div>
+                            <div class="change-positive">+1.82%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="price-card">
+                    <div class="card-content">
+                        <div class="card-left">
+                            <div class="icon">₿/Ξ</div>
+                            <div class="pair-info">
+                                <div class="base-currency">BTC</div>
+                                <div class="quote-currency">/ETH</div>
+                            </div>
+                        </div>
+                        <div class="card-right">
+                            <div class="price">25.9428 ETH</div>
+                            <div class="change-positive">+0.63%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="price-card">
+                    <div class="card-content">
+                        <div class="card-left">
+                            <div class="icon">🟡</div>
+                            <div class="pair-info">
+                                <div class="base-currency">BNB</div>
+                                <div class="quote-currency">/ETH</div>
+                            </div>
+                        </div>
+                        <div class="card-right">
+                            <div class="price">0.1456 ETH</div>
+                            <div class="change-negative">-0.92%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Automation Status -->
+            <div class="automation-status">
+                <div class="status-label">Automation</div>
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <div class="status-text">Active</div>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <div class="footer">
+                Updated via Chainlink Oracles
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -2,6 +2,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { ChatSidebar } from './ChatSidebar'
 import { ChatWindow } from './ChatWindow'
+import { SimplePriceTest } from './SimplePriceTest'
 
 export const ChatLayout: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ export const ChatLayout: React.FC = () => {
         className="w-80 bg-black/30 backdrop-blur-lg border-r border-white/10 flex flex-col"
       >
         <ChatSidebar />
+        <SimplePriceTest />
       </motion.div>
 
       {/* Main Chat Area */}
