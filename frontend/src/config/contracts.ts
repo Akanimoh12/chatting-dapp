@@ -1,21 +1,34 @@
 // Contract addresses for different networks
 export const CONTRACT_ADDRESSES = {
-  // Ethereum Sepolia testnet (commented but preserved)
-  // 11155111: '0x6767Dd3830A88DED122c5dA4d05D052227097886', // Original Sepolia deployment
+  // Ethereum Sepolia testnet - Active deployment with price oracle
+  11155111: '0x6C74B43b04C17322c5DfCE754b1d321EF7DF1a2c', // BoomerChatRegistry on Sepolia
   
-  // Lisk Sepolia testnet - Active deployment
+  // Lisk Sepolia testnet
   4202: '0x6C74B43b04C17322c5DfCE754b1d321EF7DF1a2c', // Deployed BoomerChatRegistry on Lisk Sepolia
   
   // Mainnet (when ready)
   1: '0x0000000000000000000000000000000000000000',
 } as const
 
+// Price Oracle addresses on Sepolia
+export const PRICE_ORACLE_ADDRESSES = {
+  11155111: {
+    chainlinkPriceOracle: '0x4B001ec1F48dAE2883Fa2Dba87bE7ADc66F1B3f7',
+    priceChatIntegration: '0xBeC8dD4CA8b227c04BCD23EB4Bcf3bCE4E5BF795'
+  }
+} as const
+
 // Get contract address for current network
 export const getContractAddress = (chainId: number): string => {
-  return CONTRACT_ADDRESSES[chainId as keyof typeof CONTRACT_ADDRESSES] || CONTRACT_ADDRESSES[4202]
+  return CONTRACT_ADDRESSES[chainId as keyof typeof CONTRACT_ADDRESSES] || CONTRACT_ADDRESSES[11155111]
 }
 
-// Default to Lisk Sepolia for development
+// Get price oracle addresses for current network
+export const getPriceOracleAddresses = (chainId: number) => {
+  return PRICE_ORACLE_ADDRESSES[chainId as keyof typeof PRICE_ORACLE_ADDRESSES]
+}
+
+// Default to Ethereum Sepolia for development
 export const CONTRACT_ADDRESS = '0x6C74B43b04C17322c5DfCE754b1d321EF7DF1a2c'
 
 // Contract ABI (Application Binary Interface) - JSON format for better wagmi compatibility
@@ -220,5 +233,103 @@ export const BOOMER_CHAT_ABI = [
     ],
     "anonymous": false
   }
-] as const// Registration fee (0.001 ETH)
+] as const
+
+// Chainlink Price Oracle ABI
+export const PRICE_ORACLE_ABI = [
+  {
+    "type": "function",
+    "name": "getLatestPrice",
+    "inputs": [{"name": "pairName", "type": "string"}],
+    "outputs": [
+      {"name": "price", "type": "int256"},
+      {"name": "timestamp", "type": "uint256"},
+      {"name": "decimals", "type": "uint8"}
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getAllPrices",
+    "inputs": [],
+    "outputs": [
+      {"name": "btcUsd", "type": "int256"},
+      {"name": "ethUsd", "type": "int256"},
+      {"name": "btcEth", "type": "int256"},
+      {"name": "bnbEth", "type": "int256"},
+      {"name": "lastUpdate", "type": "uint256"}
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getPriceChangePercentage",
+    "inputs": [{"name": "pairName", "type": "string"}],
+    "outputs": [{"name": "percentageChange", "type": "int256"}],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getFormattedPrice",
+    "inputs": [{"name": "pairName", "type": "string"}],
+    "outputs": [{"name": "formattedPrice", "type": "string"}],
+    "stateMutability": "view"
+  },
+  {
+    "type": "event",
+    "name": "PriceUpdated",
+    "inputs": [
+      {"name": "pairName", "type": "string", "indexed": true},
+      {"name": "oldPrice", "type": "int256", "indexed": false},
+      {"name": "newPrice", "type": "int256", "indexed": false},
+      {"name": "percentageChange", "type": "int256", "indexed": false},
+      {"name": "timestamp", "type": "uint256", "indexed": false}
+    ],
+    "anonymous": false
+  }
+] as const
+
+// Price Chat Integration ABI
+export const PRICE_INTEGRATION_ABI = [
+  {
+    "type": "function",
+    "name": "getIntegrationStatus",
+    "inputs": [],
+    "outputs": [
+      {"name": "alerts", "type": "bool"},
+      {"name": "summaries", "type": "bool"},
+      {"name": "botRegistered", "type": "bool"},
+      {"name": "minInterval", "type": "uint256"},
+      {"name": "lastSummary", "type": "uint256"}
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "checkAndPostPriceAlerts",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "postHourlySummary",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "PriceAlertPosted",
+    "inputs": [
+      {"name": "pairName", "type": "string", "indexed": true},
+      {"name": "priceChange", "type": "int256", "indexed": false},
+      {"name": "newPrice", "type": "int256", "indexed": false},
+      {"name": "messageId", "type": "uint256", "indexed": false}
+    ],
+    "anonymous": false
+  }
+] as const
+
+// Registration fee (0.001 ETH)
 export const REGISTRATION_FEE = '0.001'
